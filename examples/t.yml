@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  
+  tasks:
+    - name: create a disk
+      ping: 
+      register: response
+
+    - debug: msg={{ response }}

@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  user: root
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+  - name: Run shell
+    shell: echo  Hello
+    register: command_out
+
+  - debug: msg={{ command_out.stdout }}

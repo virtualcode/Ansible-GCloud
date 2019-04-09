@@ -1,0 +1,60 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    service_account_file: <SECRET>.json
+    project: ansiblecloudlive
+    auth_kind: serviceaccount
+
+  tasks:
+
+   - name: create network
+     gcp_compute_network:
+        name: "network-instance"
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: absent
+     register: network
+
+   - name: create nework address
+     gcp_compute_address:
+        name: "address-instance"
+        region: us-east4
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+     register: address
+
+   - name: create disk
+     gcp_compute_disk:
+        name: "disk-instance"
+        size_gb: 20
+        source_image: projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts
+        zone: us-east4-a
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: absent
+     register: disk
+
+   - name: Create instance
+     gcp_compute_instance:
+         name: 'ansible-test'
+         zone: 'us-east4-a'
+         machine_type: n1-standard-1
+         disks:
+         - auto_delete: true
+           boot: true
+           source: "{{ disk }}"
+         project: "{{ project }}"
+         auth_kind: "{{ auth_kind }}"
+         service_account_file: "{{ service_account_file }}"
+         state: absent
+         network_interfaces:
+           - network: "{{ network }}"
+             access_configs:
+             - name: External_NAT
+               nat_ip: "{{ address }}"
+               type: ONE_TO_ONE_NAT

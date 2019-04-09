@@ -1,0 +1,19 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    service_account_file: <SECRET>.json
+    project: ansiblecloudlive
+    auth_kind: serviceaccount
+
+  tasks:
+
+   - name: Allocate an IP Address
+     gcp_compute_address:
+         state: present
+         name: 'test-ansible-ip'
+         region: 'us-east4'
+         project: "{{ project }}"
+         auth_kind: "{{ auth_kind }}"
+         service_account_file: "{{ service_account_file }}"

@@ -1,0 +1,10 @@
+# CLI Examples for gcloud and ansible
+
+# config manipulation
+gcloud init
+gcloud config list
+gcloud config set <setting>
+
+
+# Manipulate compute resources
+gcloud compute instances start <instance_name>

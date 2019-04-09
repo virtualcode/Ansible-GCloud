@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    service_account_file: <SECRET>
+    project: ansiblecloudlive
+    auth_kind: serviceaccount
+
+  tasks:
+
+   - name: Gather instance facts
+     gcp_compute_instance_facts:
+         zone: us-east4-a
+         project: "{{ project }}"
+         auth_kind: "{{ auth_kind }}"
+         service_account_file: "{{ service_account_file }}"

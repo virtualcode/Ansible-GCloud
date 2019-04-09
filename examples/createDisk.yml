@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: create a disk
+    gcp_compute_disk:
+      name: "test_dist1"
+      size_gb: 50
+      zone: "us-east4-a"
+      project: "ansiblecloudlive"
+      auth_kind: "serviceaccount"
+      state: present
