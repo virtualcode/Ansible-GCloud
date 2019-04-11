@@ -11,7 +11,7 @@
 
    - name: create network
      gcp_compute_network:
-        name: "network-instance"
+        name: "net-ans"
         project: "{{ project }}"
         auth_kind: "{{ auth_kind }}"
         service_account_file: "{{ service_account_file }}"
@@ -20,7 +20,8 @@
 
    - name: create nework address
      gcp_compute_address:
-        name: "address-instance"
+        name: "add-ans"
+        address_type: INTERNAL
         region: us-east4
         project: "{{ project }}"
         auth_kind: "{{ auth_kind }}"
@@ -29,7 +30,7 @@
 
    - name: create disk
      gcp_compute_disk:
-        name: "disk-instance"
+        name: "disk-ans"
         size_gb: 20
         source_image: projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts
         zone: us-east4-a
@@ -41,7 +42,7 @@
 
    - name: Create instance
      gcp_compute_instance:
-         name: 'ansible-test'
+         name: 'ansible-master'
          zone: 'us-east4-a'
          machine_type: n1-standard-1
          disks:
@@ -55,6 +56,6 @@
          network_interfaces:
            - network: "{{ network }}"
              access_configs:
-             - name: External_NAT
+             - name: Internal_NAT
                nat_ip: "{{ address }}"
                type: ONE_TO_ONE_NAT
